@@ -57,7 +57,7 @@ This method has an options parameter with the following optional values:
 
 Result of success callback is an `Array` of recognized terms.
 
-There is a difference between Android and iOS platforms. On Android speech recognition stops when the speaker finishes speaking (at end of sentence). On iOS the user has to stop manually the recognition process by calling stopListening() method.
+iOS devices with iOS 13+ uses Siri to evaluate the speech. For this reason Siri has to be enabled so speech recognition works.
 
 If you set `showPartial` to `true` on iOS the success callback will be called multiple times until `stopListening()` called.
 
