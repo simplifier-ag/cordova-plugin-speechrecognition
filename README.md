@@ -49,7 +49,7 @@ window.plugins.speechRecognition.startListening(
 
 This method has an options parameter with the following optional values:
 
-- `language` {String} used language for recognition (default `"en-US"`)
+- `language` {String} used language for recognition (default device language)
 - `matches` {Number} number of return matches (default `5`, on iOS: maximum number of matches)
 - `prompt` {String} displayed prompt of listener popup window (default `""`, Android only)
 - `showPopup` {Boolean} display listener popup window with prompt (default `true`, Android only)
