@@ -52,8 +52,7 @@
       <string>Request to use Speech Recognition</string>
     </config-file>
 
-    <header-file src="src/ios/SpeechRecognition.h"/>
-    <source-file src="src/ios/SpeechRecognition.m"/>
+    <source-file src="src/ios/SpeechRecognition.swift"/>
 
     <framework src="Speech.framework" />
   </platform>
