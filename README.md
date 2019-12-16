@@ -1,9 +1,5 @@
 # cordova-plugin-speechrecognition
 
-[![npm](https://img.shields.io/npm/v/cordova-plugin-speechrecognition.svg)](https://www.npmjs.com/package/cordova-plugin-speechrecognition)
-![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios-lightgrey.svg)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R7STJ6V2PNEMA)
-
 This is a cordova plugin for Speech Recognition.
 
 
