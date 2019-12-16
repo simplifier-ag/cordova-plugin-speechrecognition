@@ -9,7 +9,6 @@ import Speech
 import AVFoundation
 
 @objc (SpeechRecognition) class SpeechRecognition : CDVPlugin {
-    private static let DEFAULT_LANGUAGE: String = "en-US"
     private static let DEFAULT_MATCHES: Int = 5
 
     private static let MESSAGE_MISSING_PERMISSION: String = "Missing permission"
@@ -57,7 +56,7 @@ import AVFoundation
             return
         }
 
-        let language: String? = command.argument(at: 0, withDefault: SpeechRecognition.DEFAULT_LANGUAGE) as? String
+        let language: String? = command.argument(at: 0, withDefault: nil) as? String
         let matches: Int = command.argument(at: 1, withDefault: SpeechRecognition.DEFAULT_MATCHES) as? Int
             ?? SpeechRecognition.DEFAULT_MATCHES
         let showPartial: Bool = command.argument(at: 3, withDefault: false) as? Bool ?? false
