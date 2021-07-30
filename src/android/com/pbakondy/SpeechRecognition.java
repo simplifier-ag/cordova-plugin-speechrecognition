@@ -14,6 +14,7 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import android.Manifest;
@@ -203,6 +204,15 @@ public class SpeechRecognition extends CordovaPlugin {
     }
 
     Intent detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
+
+    PackageManager packageManager = cordova.getActivity().getPackageManager();
+
+    for (PackageInfo packageInfo : packageManager.getInstalledPackages(0)) {
+      if (packageInfo.packageName.contains("com.google.android.googlequicksearchbox")) {
+        detailsIntent.setPackage("com.google.android.googlequicksearchbox");
+      }
+    }
+
     activity.sendOrderedBroadcast(detailsIntent, null, languageDetailsChecker, null, Activity.RESULT_OK, null, null);
   }
 
