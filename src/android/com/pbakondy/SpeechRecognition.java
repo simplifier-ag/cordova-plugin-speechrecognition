@@ -2,31 +2,27 @@
 
 package com.pbakondy;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.PluginResult;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
-import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-
 import android.util.Log;
 import android.view.View;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,14 +63,11 @@ public class SpeechRecognition extends CordovaPlugin {
     context = webView.getContext();
     view = webView.getView();
 
-    view.post(new Runnable() {
-      @Override
-      public void run() {
-        recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
-        SpeechRecognitionListener listener = new SpeechRecognitionListener();
-        recognizer.setRecognitionListener(listener);
-      }
-    });
+    view.post(() -> {
+	    recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+	    SpeechRecognitionListener listener = new SpeechRecognitionListener();
+	    recognizer.setRecognitionListener(listener);
+	  });
   }
 
   @Override
@@ -203,13 +196,25 @@ public class SpeechRecognition extends CordovaPlugin {
       return;
     }
 
-    Intent detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+      recognizer.checkRecognitionSupport(
+              intent,
+              cordova.getThreadPool(),
+              languageDetailsChecker.getRecognitionSupportCallback());
+      return;
+    }
 
-    PackageManager packageManager = cordova.getActivity().getPackageManager();
+    Intent detailsIntent = RecognizerIntent.getVoiceDetailsIntent(context);
 
-    for (PackageInfo packageInfo : packageManager.getInstalledPackages(0)) {
-      if (packageInfo.packageName.contains("com.google.android.googlequicksearchbox")) {
-        detailsIntent.setPackage("com.google.android.googlequicksearchbox");
+    if (detailsIntent == null) {
+      detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
+      PackageManager packageManager = cordova.getActivity().getPackageManager();
+
+      for (PackageInfo packageInfo : packageManager.getInstalledPackages(0)) {
+        if (packageInfo.packageName.contains("com.google.android.googlequicksearchbox")) {
+          detailsIntent.setPackage("com.google.android.googlequicksearchbox");
+        }
       }
     }
 
