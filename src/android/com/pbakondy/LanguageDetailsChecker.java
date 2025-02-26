@@ -21,49 +21,48 @@ import java.util.List;
 
 public class LanguageDetailsChecker extends BroadcastReceiver {
 
-    private static final String ERROR = "Could not get list of languages";
+	private static final String ERROR = "Could not get list of languages";
 
-    private List<String> supportedLanguages;
-    private final CallbackContext callbackContext;
+	private List<String> supportedLanguages;
+	private final CallbackContext callbackContext;
 
-    public LanguageDetailsChecker(CallbackContext callbackContext) {
-        super();
-        this.callbackContext = callbackContext;
-    }
+	public LanguageDetailsChecker(CallbackContext callbackContext) {
+		super();
+		this.callbackContext = callbackContext;
+	}
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 	public RecognitionSupportCallback getRecognitionSupportCallback() {
-        return new RecognitionSupportCallback() {
-            @Override
-            public void onSupportResult(@NonNull RecognitionSupport recognitionSupport) {
+		return new RecognitionSupportCallback() {
+			@Override
+			public void onSupportResult(@NonNull RecognitionSupport recognitionSupport) {
 				supportedLanguages = recognitionSupport.getSupportedOnDeviceLanguages();
 				JSONArray languages = new JSONArray(supportedLanguages);
 				callbackContext.success(languages);
 			}
 
-            @Override
-            public void onError(int error) {
-                // callbackContext.error(ERROR);
-            }
-        };
-    }
+			@Override
+			public void onError(int error) {
+			}
+		};
+	}
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Bundle results = getResultExtras(true);
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		Bundle results = getResultExtras(true);
 
-        if (results.containsKey(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)) {
-            supportedLanguages = results.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES);
+		if (results.containsKey(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)) {
+			supportedLanguages = results.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES);
 
-            JSONArray languages = new JSONArray(supportedLanguages);
-            callbackContext.success(languages);
-            return;
-        }
+			JSONArray languages = new JSONArray(supportedLanguages);
+			callbackContext.success(languages);
+			return;
+		}
 
-        callbackContext.error(ERROR);
-    }
+		callbackContext.error(ERROR);
+	}
 
-    public List<String> getSupportedLanguages() {
-        return supportedLanguages;
-    }
+	public List<String> getSupportedLanguages() {
+		return supportedLanguages;
+	}
 }
